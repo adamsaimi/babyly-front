@@ -7,6 +7,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BabyFoot: typeof import('./components/BabyFoot.vue')['default']
+    GameCard: typeof import('./components/GameCard.vue')['default']
+    GameList: typeof import('./components/GameList.vue')['default']
+    Header: typeof import('./components/Header.vue')['default']
+    MatchForms: typeof import('./components/MatchForms.vue')['default']
+    PlayerCard: typeof import('./components/PlayerCard.vue')['default']
+    PlayersList: typeof import('./components/PlayersList.vue')['default']
     README: typeof import('./components/README.md')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

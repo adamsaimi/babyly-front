@@ -2,12 +2,12 @@ import { ViteSSG } from 'vite-ssg'
 import { setupLayouts } from 'virtual:generated-layouts'
 
 import { routes } from 'vue-router/auto-routes'
+import PrimeVue from 'primevue/config'
+import Aura from '@primevue/themes/aura'
 import App from './App.vue'
 import type { UserModule } from './types'
-
 import '@unocss/reset/tailwind.css'
-import './styles/main.css'
-import 'uno.css'
+import './assets/index.css'
 
 // https://github.com/antfu/vite-ssg
 export const createApp = ViteSSG(
@@ -21,5 +21,12 @@ export const createApp = ViteSSG(
     Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
       .forEach(i => i.install?.(ctx))
     // ctx.app.use(Previewer)
+    ctx.app.use(PrimeVue, {
+      theme: {
+        preset: Aura,
+      },
+    })
+    console.warn = () => {};
+
   },
 )
