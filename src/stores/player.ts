@@ -23,13 +23,13 @@ export const usePlayerStore = defineStore('player', {
       return this.$state
     },
     async savePlayer(body: any) {
-      const formData = new FormData();
+      const formData = new FormData()
 
       if (body.name)
-        formData.append('name', body.name);
+        formData.append('name', body.name)
 
       if (body.profile_pic)
-        formData.append('profile_pic', body.profile_pic);
+        formData.append('profile_pic', body.profile_pic)
 
       // save a player
       const resp = await fetch('/api/players/', {

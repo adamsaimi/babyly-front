@@ -2,11 +2,10 @@
 import Card from 'primevue/card'
 import Avatar from 'primevue/avatar'
 
-import InputText from 'primevue/inputtext'
-import Button from 'primevue/button'
+import type { Game } from '~/types'
 
 const props = defineProps<{
-  game: object
+  game: Game
 }>()
 
 const teamWinner = computed(() => {
@@ -25,13 +24,13 @@ const teamWinner = computed(() => {
       <div class="card">
         <div class="name">
           <div class="team flex justify-start">
-            <Avatar :class="{ 'winner-logo': teamWinner === 0 }" label="P" class="mr-2" size="medium" shape="circle" />
-            <Avatar v-if="game.teams[0].players.length > 1" :class="{ 'winner-logo': teamWinner === 0 }" :label="game.teams[0].players[1].player_name.charAt(0)" class="mr-2" size="medium" shape="circle" />
+            <Avatar v-tooltip.top="game.teams[0].players[0].player_name" :class="{ 'winner-logo': teamWinner === 0 }" :label="game.teams[0].players[0].player_name.charAt(0)" class="mr-2" size="medium" shape="circle" />
+            <Avatar v-if="game.teams[0].players.length > 1" v-tooltip.top="game.teams[0].players[1].player_name" :class="{ 'winner-logo': teamWinner === 0 }" :label="game.teams[0].players[1].player_name.charAt(0)" class="mr-2" size="medium" shape="circle" />
           </div>
           vs
           <div class="team flex justify-end">
-            <Avatar :class="{ 'winner-logo': teamWinner === 1 }" label="P" class="mr-2" size="medium" shape="circle" />
-            <Avatar v-if="game.teams[1].players.length > 1" :class="{ 'winner-logo': teamWinner === 1 }" label="P" class="mr-2" size="medium" shape="circle" />
+            <Avatar v-tooltip.top="game.teams[1].players[0].player_name" :class="{ 'winner-logo': teamWinner === 1 }" :label="game.teams[1].players[0].player_name.charAt(0)" class="mr-2" size="medium" shape="circle" />
+            <Avatar v-if="game.teams[1].players.length > 1" v-tooltip.top="game.teams[1].players[1].player_name" :class="{ 'winner-logo': teamWinner === 1 }" label="P" class="mr-2" size="medium" shape="circle" />
           </div>
         </div>
         <div>

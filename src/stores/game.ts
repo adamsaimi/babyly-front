@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import type { Game } from '~/types'
 
 export const useGameStore = defineStore('game', {
   state: () => {
@@ -6,7 +7,7 @@ export const useGameStore = defineStore('game', {
       count: 0,
       next: '',
       previous: '',
-      results: [],
+      results: [] as Game[],
     }
   },
 

@@ -1,33 +1,32 @@
 <script setup lang="ts">
-import InputGroup from 'primevue/inputgroup'
-import InputGroupAddon from 'primevue/inputgroupaddon'
-
 import InputNumber from 'primevue/inputnumber'
-
+import Avatar from 'primevue/avatar'
 import Select from 'primevue/select'
 import Button from 'primevue/button'
 import Message from 'primevue/message'
-import { TresCanvas } from '@tresjs/core'
+import { TresCanvas, useRenderLoop } from '@tresjs/core'
+import { Levioso, Stars } from '@tresjs/cientos'
 import BabyFoot from './BabyFoot.vue'
 import { useGameStore } from '~/stores/game'
 import { usePlayerStore } from '~/stores/player'
+import type { GameForm, PlayerForm } from '~/types'
 
 const gameStore = useGameStore()
 const playerStore = usePlayerStore()
-const game = ref(
+const game = ref<GameForm>(
   {
     teams: [
       {
         players: [
-          { player: '' },
-          { player: '' },
+          undefined,
+          undefined,
         ],
         score: undefined,
       },
       {
         players: [
-          { player: '' },
-          { player: '' },
+          undefined,
+          undefined,
         ],
         score: undefined,
       },
@@ -42,14 +41,13 @@ const canSubmit = computed(() => {
 
 function validateTeams() {
   for (const team of game.value.teams) {
-    if (team.players[0].player === '' && team.players[1].player === '')
+    if (!team.players[0] && !team.players[1])
       return false
   }
 
   return true
 }
-const renderAudio = ref(false)
-const submitted = ref(false)
+
 function validateScore() {
   if (game.value.teams[0].score == null || game.value.teams[1].score == null)
     return false
@@ -57,59 +55,53 @@ function validateScore() {
   if (game.value.teams[0].score === game.value.teams[1].score)
     return false
 
-  renderAudio.value = true
   return true
 }
 const currentPlayerList = ref<any[]>([])
-const currentPlayerUsed = ref<string[]>([])
+const currentPlayerUsed = ref<(string | undefined)[]>([undefined, undefined, undefined, undefined])
+
 function saveGame() {
   game.value.teams.forEach((team) => {
-    team.players = team.players.filter(el => el.player !== '')
+    team.players = team.players?.filter(el => !!el?.id)
   })
 
   gameStore.saveGame(game.value).then(() => {
-    submitted.value = true
-    setTimeout(
-      () => { submitted.value = false },
-      2000,
-    )
     game.value = {
       teams: [
         {
           players: [
-            { player: '' },
-            { player: '' },
+            undefined,
+            undefined,
           ],
           score: undefined,
         },
         {
           players: [
-            { player: '' },
-            { player: '' },
+            undefined,
+            undefined,
           ],
           score: undefined,
         },
       ],
     }
+
+    currentPlayerUsed.value = [undefined, undefined, undefined, undefined]
   })
 }
 
-function selectPlayer(playerSelected: any) {
-  if (playerSelected)
-    currentPlayerUsed.value?.push(playerSelected.name)
-  else
-    currentPlayerUsed.value = currentPlayerUsed.value?.filter(player => player !== playerSelected.name)
+function selectPlayer(playerSelected: PlayerForm, indexPlayer: 0 | 1 | 2 | 3) {
+  currentPlayerUsed.value[indexPlayer] = playerSelected?.name
 }
+
 function getPlayers() {
-  return currentPlayerList.value?.filter(player => !currentPlayerUsed.value?.includes(player.name)).map(
-    (player) => {
-      return {
-        player: player.id,
-        name: player.name,
-      }
-    },
-  )
+  return currentPlayerList.value?.filter(player => !currentPlayerUsed.value?.includes(player.name)).map(player => ({ ...player, player: player.id }))
 }
+
+const camera = ref()
+const yRotation = shallowRef(0)
+useRenderLoop().onLoop(({ delta }) => {
+  yRotation.value += 0.02 * delta
+})
 
 onBeforeMount(() => {
   playerStore.getPlayers().then(() => {
@@ -121,24 +113,36 @@ onBeforeMount(() => {
 <template>
   <div class="canvas">
     <TresCanvas>
-      <TresPerspectiveCamera visible :position="[0, 120, 150]" />
-      <Suspense>
-        <BabyFoot :submitted="submitted" :render-audio="renderAudio" submit-button-id="submitButton" />
-      </Suspense>
-      <TresDirectionalLight :position="[-4, 8, 4]" :intensity="1.5" cast-shadow />
+      <TresPerspectiveCamera ref="camera" visible :zoom="1" :near="0.1" :up="[0, 1, 0]" :fov="50" />
+
+      <Stars
+        :rotation="[0, yRotation, 0]"
+        :radius="50"
+        :depth="50"
+        :count="5000"
+        :size="0.3"
+        :size-attenuation="true"
+      />
+
+      <Levioso>
+        <Suspense>
+          <BabyFoot />
+        </Suspense>
+        <TresDirectionalLight :position="[-4, 8, 4]" :intensity="1.5" />
+      </Levioso>
     </TresCanvas>
   </div>
 
-  <form class="forms">
+  <form class="forms gameForm">
+    <h1>Add a Game</h1>
     <h2>TEAMS</h2>
-
     <div class="game-team">
-      <div class="team">
-        <InputGroup>
-          <InputGroupAddon>
-            <i class="pi pi-user" />
-          </InputGroupAddon>
-          <Select v-model="game.teams[0].players[0]" class="select-player" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[0].players[0])">
+      <div class="team" style="align-items: end;">
+        <div class="flex flex-row gap-2">
+          <Transition name="slide-left">
+            <Avatar v-if="game.teams[0].players[0]" v-style-class="{ enterFromClass: 'my-hidden', enterActiveClass: 'my-fadein' }" :image="game.teams[0].players[0].profile_pic" :label="game.teams[0].players[0].profile_pic ? '' : game.teams[0].players[0]?.name?.charAt(0)" class="avatar-select" size="medium" shape="circle" />
+          </Transition>
+          <Select v-model="game.teams[0].players[0]" show-clear class="select-player w-full" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[0].players[0], 0)">
             <template #value="slotProps">
               <div v-if="slotProps.value" class="flex items-center">
                 <div>
@@ -155,12 +159,13 @@ onBeforeMount(() => {
               </div>
             </template>
           </Select>
-        </InputGroup>
-        <InputGroup>
-          <InputGroupAddon>
-            <i class="pi pi-user" />
-          </InputGroupAddon>
-          <Select v-model="game.teams[0].players[1]" class="select-player" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[0].players[1])">
+        </div>
+        <div class="flex flex-row gap-2">
+          <Transition name="slide-left">
+            <Avatar v-if="game.teams[0].players[1]" :image="game.teams[0].players[1].profile_pic" :label="game.teams[0].players[1].profile_pic ? '' : game.teams[0].players[1].name.charAt(0)" class="avatar-select" size="medium" shape="circle" />
+          </Transition>
+
+          <Select v-model="game.teams[0].players[1]" show-clear class="select-player" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[0].players[1], 1)">
             <template #value="slotProps">
               <div v-if="slotProps.value" class="flex items-center">
                 <div>{{ slotProps.value.name }}</div>
@@ -175,7 +180,7 @@ onBeforeMount(() => {
               </div>
             </template>
           </Select>
-        </InputGroup>
+        </div>
       </div>
 
       <div>
@@ -183,11 +188,8 @@ onBeforeMount(() => {
       </div>
 
       <div class="team">
-        <InputGroup>
-          <InputGroupAddon>
-            <i class="pi pi-user" />
-          </InputGroupAddon>
-          <Select v-model="game.teams[1].players[0]" class="select-player" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[1].players[0])">
+        <div class="flex flex-row gap-2">
+          <Select v-model="game.teams[1].players[0]" show-clear class="select-player" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[1].players[0], 2)">
             <template #value="slotProps">
               <div v-if="slotProps.value" class="flex items-center">
                 <div>
@@ -204,12 +206,12 @@ onBeforeMount(() => {
               </div>
             </template>
           </Select>
-        </InputGroup>
-        <InputGroup>
-          <InputGroupAddon>
-            <i class="pi pi-user" />
-          </InputGroupAddon>
-          <Select v-model="game.teams[1].players[1]" class="select-player" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[1].players[1])">
+          <Transition name="slide-right">
+            <Avatar v-if="game.teams[1].players[0]" :image="game.teams[0].players[0]?.profile_pic" :label="game.teams[1].players[0].profile_pic ? '' : game.teams[1].players[0].name.charAt(0)" class="avatar-select" size="medium" shape="circle" />
+          </Transition>
+        </div>
+        <div class="flex flex-row gap-2">
+          <Select v-model="game.teams[1].players[1]" show-clear class="select-player" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[1].players[1], 3)">
             <template #value="slotProps">
               <div v-if="slotProps.value" class="flex items-center">
                 <div>{{ slotProps.value.name }}</div>
@@ -224,25 +226,28 @@ onBeforeMount(() => {
               </div>
             </template>
           </Select>
-        </InputGroup>
+          <Transition name="slide-right">
+            <Avatar v-if="game.teams[1].players[1]" :image="game.teams[1].players[1].profile_pic" :label="game.teams[1].players[1].profile_pic ? '' : game.teams[1].players[1].name.charAt(0)" class="avatar-select" size="medium" shape="circle" />
+          </Transition>
+        </div>
       </div>
     </div>
 
-    <h2 style="margin-top: 50px;">
+    <h2 class="mt-10">
       SCORE
     </h2>
 
     <div
       class="scores"
     >
-      <div class="score">
-        <InputNumber v-model="game.teams[0].score" placeholder="Score" aria-label="score" />
+      <div class="score mt-5">
+        <InputNumber v-model="game.teams[0].score" placeholder="Score" input-id="integeronly" aria-label="score" />
         <Message v-if="!scoreEmpty && !validateScore()" severity="error" icon="pi pi-times-circle" />
       </div>
 
       -
-      <div class="score">
-        <InputNumber v-model="game.teams[1].score" placeholder="Score" aria-label="score" />
+      <div class="score mt-5">
+        <InputNumber v-model="game.teams[1].score" placeholder="Score" input-id="integeronly" aria-label="score" />
         <Message v-if="!scoreEmpty && !validateScore()" severity="error" icon="pi pi-times-circle" />
       </div>
     </div>
@@ -252,19 +257,34 @@ onBeforeMount(() => {
 </template>
 
 <style lang="scss" scoped>
-.forms {
-  width: 100%;
-  height: calc(50% + 60px);
+.gameForm {
+  width: 50%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  float: right;
+  h1 {
+    vertical-align: baseline;
+    margin-bottom: 20px;
+  }
+
+  .select-player {
+    width: 200px;
+    height: 40px;
+  }
+
+  .avatar-select {
+    align-self: center;
+  }
 }
 .team {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   gap: 10px;
+  width: 240px;
 }
 .game-team {
   display: flex;
@@ -280,16 +300,10 @@ onBeforeMount(() => {
   justify-content: center;
   align-items: center;
   gap: 20px;
-  margin-top: 50px;
   .score {
     display: flex;
     flex-direction: row;
   }
-}
-
-.p-inputgroup {
-  width: 200px !important;
-  height: 50px !important;
 }
 
 .submit-button {
@@ -301,5 +315,28 @@ onBeforeMount(() => {
   position: absolute;
   top: 121px;
   z-index: 0;
+  float: left;
+}
+
+// Animation
+.slide-right-enter-active,
+.slide-left-enter-active {
+  transition: all 0.3s ease-out;
+}
+.slide-right-leave-active,
+.slide-left-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-left-enter-from,
+.slide-left-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
+.slide-right-enter-from,
+.slide-right-leave-to {
+  transform: translateX(-20px);
+  opacity: 0;
 }
 </style>

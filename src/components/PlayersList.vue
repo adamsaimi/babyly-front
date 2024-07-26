@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
-import ColumnGroup from 'primevue/columngroup' // optional
-import Row from 'primevue/row' // optional
 import PlayerCard from './PlayerCard.vue'
 import { usePlayerStore } from '~/stores/player'
 import type { Player } from '~/types'

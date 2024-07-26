@@ -3,6 +3,7 @@ import { setupLayouts } from 'virtual:generated-layouts'
 
 import { routes } from 'vue-router/auto-routes'
 import PrimeVue from 'primevue/config'
+import Tooltip from 'primevue/tooltip'
 import Aura from '@primevue/themes/aura'
 import App from './App.vue'
 import type { UserModule } from './types'
@@ -26,7 +27,9 @@ export const createApp = ViteSSG(
         preset: Aura,
       },
     })
-    console.warn = () => {};
 
+    ctx.app.directive('tooltip', Tooltip)
+
+    console.warn = () => {}
   },
 )

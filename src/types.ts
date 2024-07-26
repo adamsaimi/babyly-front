@@ -9,9 +9,18 @@ export interface Player {
   victories: number
   defeats: number
   profile_pic: string
-  updated_at: string
-  created_at: string
 }
+
+export interface GameForm {
+  teams: GameTeamForm[]
+}
+
+export interface GameTeamForm {
+  players: PlayerForm[]
+  score?: number
+}
+export type PlayerForm = Player | undefined
+
 export interface Game {
   id: number
   created_at: string
@@ -26,8 +35,15 @@ export interface GameTeam {
 }
 
 export interface GameTeamPlayer {
+  player_name: any
   id: number
   team: number
   player: Player
   player_elo: number
+}
+
+export interface GamePlayer {
+  id: number
+  player_name: string
+  profile_pic: string
 }

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import GameCard from './GameCard.vue'
+import type { Game } from '~/types'
 import { useGameStore } from '~/stores/game'
 
 const gameStore = useGameStore()
-const gameList = ref([])
+const gameList = ref<Game[]>([])
 
 onBeforeMount(() => {
   gameStore.getGames().then(() => {
