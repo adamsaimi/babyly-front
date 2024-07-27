@@ -9,6 +9,7 @@ import App from './App.vue'
 import type { UserModule } from './types'
 import '@unocss/reset/tailwind.css'
 import './assets/index.css'
+import 'primeicons/primeicons.css'
 
 // https://github.com/antfu/vite-ssg
 export const createApp = ViteSSG(
@@ -25,6 +26,9 @@ export const createApp = ViteSSG(
     ctx.app.use(PrimeVue, {
       theme: {
         preset: Aura,
+        options: {
+          darkModeSelector: '.dark-mode-switch',
+        },
       },
     })
 

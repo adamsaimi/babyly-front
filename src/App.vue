@@ -13,6 +13,10 @@ useHead({
       name: 'theme-color',
       content: () => isDark.value ? '#00aba9' : '#ffffff',
     },
+    {
+      name: 'dark-mode-switch',
+      content: isDark.value,
+    },
   ],
   link: [
     {

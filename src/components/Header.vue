@@ -1,4 +1,22 @@
 <script setup lang="ts">
+function toggleColorScheme() {
+  const element = document.querySelector('html')
+  const isDarkMode = element?.classList.toggle('dark-mode-switch')
+
+  toggleDark(isDarkMode)
+}
+
+onBeforeMount(() => {
+  const element = document.querySelector('html')
+  element?.classList.toggle('dark-mode-switch')
+
+  if (isDark.value && !element?.classList.contains('dark-mode-switch'))
+    element?.classList.toggle('dark-mode-switch')
+
+  if (!isDark.value && element?.classList.contains('dark-mode-switch'))
+    element?.classList.toggle('dark-mode-switch')
+},
+)
 </script>
 
 <template>
@@ -17,6 +35,13 @@
         Games
       </router-link>
     </nav>
+
+    <div class="flex gap-10">
+      <button @click="toggleColorScheme()">
+        <i v-if="isDark" class="pi pi-moon" />
+        <i v-else class="pi pi-sun" />
+      </button>
+    </div>
   </div>
 </template>
 
