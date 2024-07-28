@@ -228,15 +228,16 @@ onBeforeMount(() => {
     </h2>
 
     <div
-      class="scores"
+      class="scores mt-5"
     >
-      <div class="score mt-5">
+      <div class="score">
         <InputNumber v-model="game.teams[0].score" placeholder="Score" input-id="integeronly" aria-label="score" />
         <Message v-if="!scoreEmpty && !validateScore()" severity="error" icon="pi pi-times-circle" />
       </div>
-
-      -
-      <div class="score mt-5">
+      <div>
+        -
+      </div>
+      <div class="score">
         <InputNumber v-model="game.teams[1].score" placeholder="Score" input-id="integeronly" aria-label="score" />
         <Message v-if="!scoreEmpty && !validateScore()" severity="error" icon="pi pi-times-circle" />
       </div>
