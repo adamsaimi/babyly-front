@@ -81,4 +81,13 @@ onBeforeMount(() => {
 .player-list-cards {
   margin-bottom: 10px;
 }
+
+.canvas {
+  height: calc(100% - 121px);
+  width: 100%;
+  position: absolute;
+  top: 121px;
+  z-index: 0;
+  float: left;
+}
 </style>

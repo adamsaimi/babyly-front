@@ -2,10 +2,10 @@
 import Avatar from 'primevue/avatar'
 
 import InputText from 'primevue/inputtext'
-import Button from 'primevue/button'
 import Card from 'primevue/card'
 import FileUpload from 'primevue/fileupload'
 import type { Player } from '~/types'
+import Submit from '~/design_system/Submit.vue'
 
 defineProps<{
   player?: Player
@@ -59,7 +59,9 @@ function selectFiles(event: { files: string | any[] }) {
           <span v-if="!editing">{{ player?.defeats }}</span>
           <span v-if="!editing">{{ player?.elo }}</span>
         </div>
-        <span v-if="editing" class="submit-button"><Button size="small" @click="submit()">Submit</Button></span>
+        <span v-if="editing" class="submit-button">
+          <Submit size="small" :disabled="false" label="Submit" @click="submit()" />
+        </span>
       </div>
     </template>
   </Card>
@@ -107,6 +109,8 @@ function selectFiles(event: { files: string | any[] }) {
 
   .submit-button {
     margin-left: auto;
+    align-items: center;
+    height: 35px;
   }
 
   .detail {

@@ -2,14 +2,14 @@
 import InputNumber from 'primevue/inputnumber'
 import Avatar from 'primevue/avatar'
 import Select from 'primevue/select'
-import Button from 'primevue/button'
 import Message from 'primevue/message'
 import { TresCanvas, useRenderLoop } from '@tresjs/core'
-import { Levioso, Stars } from '@tresjs/cientos'
+import { Levioso } from '@tresjs/cientos'
 import BabyFoot from './BabyFoot.vue'
 import { useGameStore } from '~/stores/game'
 import { usePlayerStore } from '~/stores/player'
 import type { GameForm, PlayerForm } from '~/types'
+import Submit from '~/design_system/Submit.vue'
 
 const gameStore = useGameStore()
 const playerStore = usePlayerStore()
@@ -114,16 +114,6 @@ onBeforeMount(() => {
   <div class="canvas">
     <TresCanvas>
       <TresPerspectiveCamera ref="camera" visible :zoom="1" :near="0.1" :up="[0, 1, 0]" :fov="50" />
-
-      <Stars
-        :rotation="[0, yRotation, 0]"
-        :radius="50"
-        :depth="50"
-        :count="5000"
-        :size="0.3"
-        :size-attenuation="true"
-      />
-
       <Levioso>
         <Suspense>
           <BabyFoot />
@@ -252,7 +242,7 @@ onBeforeMount(() => {
       </div>
     </div>
 
-    <Button id="submitButton" class="submit-button" label="Submit" :disabled="!canSubmit" @click.prevent="saveGame()" />
+    <Submit id="submitButton" size="normal" class="submit-button" label="Submit" :disabled="!canSubmit" @click="saveGame()" />
   </form>
 </template>
 
@@ -299,7 +289,7 @@ onBeforeMount(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 25px;
   .score {
     display: flex;
     flex-direction: row;
