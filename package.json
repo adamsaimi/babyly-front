@@ -4,7 +4,7 @@
   "packageManager": "pnpm@9.1.1",
   "scripts": {
     "build": "vite-ssg build",
-    "dev": "vite --port 3333 --open",
+    "dev": "vite --port 3333 --open --host",
     "lint": "eslint .",
     "preview": "vite preview",
     "preview-https": "serve dist",
@@ -74,6 +74,7 @@
     "shiki": "^1.6.0",
     "simple-git-hooks": "^2.11.1",
     "tailwindcss": "^3.4.4",
+    "tailwindcss-primeui": "^0.3.4",
     "taze": "^0.13.8",
     "typescript": "^5.4.5",
     "unocss": "^0.60.2",

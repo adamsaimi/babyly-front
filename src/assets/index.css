@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 34 78% 91%;
     --foreground: 240 10% 3.9%;
 
     --muted: 240 4.8% 95.9%;
@@ -13,7 +13,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
 
-    --card: 0 0% 100%;
+    --card: 140 16% 67%;
     --card-foreground: 240 10% 3.9%;
 
     --border: 240 5.9% 90%;
@@ -32,12 +32,26 @@
     --destructive-foreground: 0 0% 98%;
 
     --ring: 240 10% 3.9%;
+    --radius: 4px;
 
-    --radius: 0.5rem;
+    .p-card, .p-card-body {
+      background-color: #9db8a6 !important;
+      border-radius: var(--radius);
+    }
+
+    .p-fileupload,
+    .card, .p-card-body{
+      background-color: #9db8a6 !important;
+    }
+
+    .p-scrolltop{
+      background-color: #9db8a6 !important;
+      border-color: #9db8a6 !important;
+    }
   }
 
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 280 24% 10%;
     --foreground: 0 0% 98%;
 
     --muted: 240 3.7% 15.9%;
@@ -65,6 +79,21 @@
     --destructive-foreground: 0 0% 98%;
 
     --ring: 240 4.9% 83.9%;
+
+    .p-card, .p-card-body {
+      background-color: #9ab5b5 !important;
+      border-radius: var(--radius);
+    }
+
+    .p-fileupload,
+    .card, .p-card-body {
+      background-color: #9ab5b5 !important;
+    }
+
+    .p-scrolltop{
+      background-color: #9ab5b5 !important;
+      border-color: #9ab5b5 !important;
+    }
   }
 }
 

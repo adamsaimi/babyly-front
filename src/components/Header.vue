@@ -22,10 +22,10 @@ onBeforeMount(() => {
 <template>
   <div class="header">
     <router-link to="/">
-      <h1>Babyly</h1>
+      <img :src="isDark ? '/logo-purple-2.png' : '/logo-white-2.png'" alt="">
     </router-link>
-    <nav>
-      <router-link to="/">
+    <nav class="flex gap-3">
+      <router-link v-if="isComputer()" to="/">
         Home
       </router-link>
       <router-link to="/players">
@@ -33,6 +33,9 @@ onBeforeMount(() => {
       </router-link>
       <router-link to="/games">
         Games
+      </router-link>
+      <router-link v-if="isComputer()" to="/review">
+        Wrappily
       </router-link>
     </nav>
 
@@ -53,6 +56,10 @@ onBeforeMount(() => {
   padding: 1rem;
   gap: 2rem;
   border-bottom: 1px solid #ddd;
+  img {
+    height: 50px;
+  }
+  background-color: hsl(var(--background));
 }
 
 h1 {

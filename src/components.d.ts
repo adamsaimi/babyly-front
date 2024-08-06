@@ -14,11 +14,9 @@ declare module 'vue' {
     MatchForms: typeof import('./components/MatchForms.vue')['default']
     PlayerCard: typeof import('./components/PlayerCard.vue')['default']
     PlayersList: typeof import('./components/PlayersList.vue')['default']
+    Profile: typeof import('./components/Profile.vue')['default']
     README: typeof import('./components/README.md')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    TheCounter: typeof import('./components/TheCounter.vue')['default']
-    TheFooter: typeof import('./components/TheFooter.vue')['default']
-    TheInput: typeof import('./components/TheInput.vue')['default']
   }
 }

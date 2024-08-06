@@ -13,7 +13,7 @@ useRenderLoop().onLoop(({ delta }) => {
     px-4 py-10
   >
     <Header />
-    <div class="canvas">
+    <div v-if="$route.name !== '/review'" class="canvas">
       <TresCanvas>
         <Stars
           :rotation="[0, yRotation, 0]"
@@ -29,13 +29,16 @@ useRenderLoop().onLoop(({ delta }) => {
   </main>
 </template>
 
-<style>
+<style lang="scss">
 html,
 body {
   height: 100%;
+  width: 100%;
 }
 #app {
   height: 100%;
+  width: 100%;
+
   main {
     height: 100%;
   }

@@ -5,11 +5,14 @@ import { routes } from 'vue-router/auto-routes'
 import PrimeVue from 'primevue/config'
 import Tooltip from 'primevue/tooltip'
 import Aura from '@primevue/themes/aura'
+import AnimateOnScroll from 'primevue/animateonscroll'
+import StyleClass from 'primevue/styleclass'
 import App from './App.vue'
 import type { UserModule } from './types'
 import '@unocss/reset/tailwind.css'
 import './assets/index.css'
 import 'primeicons/primeicons.css'
+import './assets/variables.scss'
 
 // https://github.com/antfu/vite-ssg
 export const createApp = ViteSSG(
@@ -33,6 +36,8 @@ export const createApp = ViteSSG(
     })
 
     ctx.app.directive('tooltip', Tooltip)
+    ctx.app.directive('styleclass', StyleClass)
+    ctx.app.directive('animateonscroll', AnimateOnScroll)
 
     console.warn = () => {}
   },

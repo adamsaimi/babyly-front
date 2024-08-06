@@ -111,7 +111,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div class="canvas">
+  <div v-if="isComputer()" class="canvas">
     <TresCanvas>
       <TresPerspectiveCamera ref="camera" visible :zoom="1" :near="0.1" :up="[0, 1, 0]" :fov="50" />
       <Levioso>
@@ -127,7 +127,7 @@ onBeforeMount(() => {
     <h1>Add a Game</h1>
     <h2>TEAMS</h2>
     <div class="game-team">
-      <div class="team" style="align-items: end;">
+      <div class="team team-one" style="align-items: end;">
         <div class="flex flex-row gap-2">
           <Transition name="slide-left">
             <Avatar v-if="game.teams[0].players[0]" v-style-class="{ enterFromClass: 'my-hidden', enterActiveClass: 'my-fadein' }" :image="game.teams[0].players[0].profile_pic" :label="game.teams[0].players[0].profile_pic ? '' : game.teams[0].players[0]?.name?.charAt(0)" class="avatar-select" size="medium" shape="circle" />
@@ -177,7 +177,7 @@ onBeforeMount(() => {
         VS
       </div>
 
-      <div class="team">
+      <div class="team team-two">
         <div class="flex flex-row gap-2">
           <Select v-model="game.teams[1].players[0]" show-clear class="select-player" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[1].players[0], 2)">
             <template #value="slotProps">
@@ -223,7 +223,7 @@ onBeforeMount(() => {
       </div>
     </div>
 
-    <h2 class="mt-10">
+    <h2>
       SCORE
     </h2>
 
@@ -248,21 +248,20 @@ onBeforeMount(() => {
 </template>
 
 <style lang="scss" scoped>
+@import '../assets/variables.scss';
+
 .gameForm {
-  width: 50%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  float: right;
   h1 {
     vertical-align: baseline;
     margin-bottom: 20px;
   }
 
   .select-player {
-    width: 200px;
     height: 40px;
   }
 
@@ -275,7 +274,6 @@ onBeforeMount(() => {
   justify-content: space-between;
   flex-direction: column;
   gap: 10px;
-  width: 240px;
 }
 .game-team {
   display: flex;
@@ -297,9 +295,6 @@ onBeforeMount(() => {
   }
 }
 
-.submit-button {
-  margin-top: 50px;
-}
 .canvas {
   height: calc(100% - 121px);
   width: 100%;
@@ -307,6 +302,70 @@ onBeforeMount(() => {
   top: 121px;
   z-index: 0;
   float: left;
+}
+.forms {
+  position: relative;
+}
+
+@include computer {
+  .team {
+    width: 240px;
+  }
+
+  .select-player {
+    width: 200px;
+  }
+
+  .forms {
+    width: 50%;
+    float: right;
+  }
+
+  .submit-button {
+    margin-top: 50px;
+  }
+
+  .game-team {
+    margin-bottom: 50px;
+  }
+}
+
+@include phone {
+  h1 {
+    font-size: 24px;
+  }
+  .team {
+    width: 240px;
+  }
+
+  .team-two {
+    margin-left: calc(0.5rem + 32px);
+  }
+
+  .team-one {
+    margin-right: calc(0.5rem + 32px);
+  }
+
+  .select-player {
+    width: 200px;
+  }
+
+  .game-form {
+    width: 100%;
+  }
+
+  :deep(.p-inputtext) {
+    width: 100px !important;
+  }
+
+  .game-team {
+    flex-direction: column;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+  .submit-button {
+    margin-top: 20px;
+  }
 }
 
 // Animation

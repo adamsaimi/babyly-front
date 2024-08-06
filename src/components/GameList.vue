@@ -32,7 +32,9 @@ onBeforeMount(() => {
   </div>
 </template>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
+@import '../assets/variables.scss';
+
 .forms {
   display: flex;
   justify-content: center;
@@ -56,6 +58,13 @@ onBeforeMount(() => {
   h2 {
     margin-bottom: 1rem;
     font-size: 28px;
+  }
+}
+
+@include phone {
+  .forms {
+    width: 100%;
+    padding: 0 15px !important;
   }
 }
 

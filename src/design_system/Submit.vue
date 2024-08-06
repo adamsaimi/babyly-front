@@ -2,7 +2,6 @@
 import { Stars } from '@tresjs/cientos'
 import Button from 'primevue/button'
 import { TresCanvas, useRenderLoop } from '@tresjs/core'
-import { defineEmits, defineProps } from 'vue'
 
 defineProps<{
   disabled: boolean

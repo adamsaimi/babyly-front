@@ -52,9 +52,9 @@ function selectFiles(event: { files: string | any[] }) {
               </template>
             </FileUpload>
           </span>
-          <InputText v-if="editing" v-model="inputPlayer.name" type="text" size="small" placeholder="Add a player" />
+          <InputText v-if="editing" v-model="inputPlayer.name" class="input-player" type="text" size="small" placeholder="Add a player" />
         </div>
-        <div class="detail flex justify-between gap-10">
+        <div class="detail flex justify-between">
           <span v-if="!editing">{{ player?.victories }}</span>
           <span v-if="!editing">{{ player?.defeats }}</span>
           <span v-if="!editing">{{ player?.elo }}</span>
@@ -68,6 +68,7 @@ function selectFiles(event: { files: string | any[] }) {
 </template>
 
 <style lang="scss" scoped>
+@import '../assets/variables.scss';
 .players-list-container {
   vertical-align: middle;
   align-self: center;
@@ -114,10 +115,27 @@ function selectFiles(event: { files: string | any[] }) {
   }
 
   .detail {
-    width: 211px;
     span {
       width: 70px;
       text-align: center;
+    }
+  }
+
+  @include phone {
+    .detail {
+      width: 30%;
+      gap: 1rem;
+    }
+
+    .input-player {
+      width: 500%;
+    }
+  }
+
+  @include computer {
+    .detail {
+      width: 211px;
+      gap: 2.5rem;
     }
   }
 }

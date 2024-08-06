@@ -27,8 +27,8 @@ onBeforeMount(() => {
       <h2>Current Player List</h2>
       <div class="players-list">
         <div class="header">
-          <span style="padding-left: 50px;">Name</span>
-          <div class="flex justify-between gap-10">
+          <span style="padding-left: 50px;" class="name">Name</span>
+          <div class="score-header flex justify-between">
             <span>Victory</span>
             <span>Defeat</span>
             <span>Elo</span>
@@ -51,15 +51,17 @@ onBeforeMount(() => {
 </template>
 
 <style lang="scss" scoped>
+@import '../assets/variables.scss';
 .forms {
   display: flex;
   justify-content: center;
   height: 100%;
   text-align: center;
+  position: relative;
 }
+
 .players-list-container {
   vertical-align: middle;
-  width: 800px;
   padding-top: 30px;
   .header {
     display: flex;
@@ -82,12 +84,32 @@ onBeforeMount(() => {
   margin-bottom: 10px;
 }
 
-.canvas {
-  height: calc(100% - 121px);
-  width: 100%;
-  position: absolute;
-  top: 121px;
-  z-index: 0;
-  float: left;
+@include phone {
+  .forms {
+    width: 100%;
+    padding: 0 15px !important;
+  }
+
+  .players-list-container {
+    width: 100%;
+  }
+
+  .name {
+    font-size: 12px;
+  }
+  .score-header {
+    width: 40%;
+    gap: 1rem;
+    font-size: 12px;
+  }
+}
+
+@include computer {
+  .players-list-container {
+    width: 800px;
+  }
+  .score-header {
+    gap: 2.5rem;
+  }
 }
 </style>
