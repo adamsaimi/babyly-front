@@ -37,5 +37,15 @@ export const useGameStore = defineStore('game', {
 
       return this.$state.results
     },
+    async calculateElo() {
+      // save the game
+      await fetch('/api/elo/calculations/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      this.getGames()
+    },
   },
 })

@@ -2,14 +2,17 @@
 import GameCard from './GameCard.vue'
 import type { Game } from '~/types'
 import { useGameStore } from '~/stores/game'
+import { usePlayerStore } from '~/stores/player'
 
 const gameStore = useGameStore()
 const gameList = ref<Game[]>([])
+const playerStore = usePlayerStore()
 
 onBeforeMount(() => {
   gameStore.getGames().then(() => {
     gameList.value = gameStore.results
   })
+  playerStore.getPlayers()
 })
 </script>
 

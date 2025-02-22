@@ -3,7 +3,6 @@ import Avatar from 'primevue/avatar'
 
 import InputText from 'primevue/inputtext'
 import Card from 'primevue/card'
-import FileUpload from 'primevue/fileupload'
 import type { Player } from '~/types'
 import Submit from '~/design_system/Submit.vue'
 
@@ -20,18 +19,9 @@ const inputPlayer = ref({
   name: undefined,
   profile_pic: undefined as any | undefined,
 })
-const file = ref()
 
 function submit() {
   emit('submit', inputPlayer.value)
-}
-function selectFiles(event: { files: string | any[] }) {
-  if (event.files.length === 0) {
-    inputPlayer.value.profile_pic = undefined
-    return
-  }
-
-  inputPlayer.value.profile_pic = event.files
 }
 </script>
 
@@ -40,24 +30,24 @@ function selectFiles(event: { files: string | any[] }) {
     <template #title>
       <div class="card">
         <div class="name">
-          <Avatar v-if="!editing" :label="player?.name.charAt(0)" class="mr-2" size="medium" shape="circle" />
+          <Avatar
+            v-if="!editing" :image="player.profile_pic" :label="player.profile_pic ? '' : player?.name.charAt(0)"
+            class="mr-2" size="medium" shape="circle"
+          />
           <span v-if="!editing">{{ player?.name }}</span>
-          <span v-if="editing">
-            <FileUpload ref="file" name="demo[]" url="/api/upload" :multiple="false" accept="image/*" :max-file-size="1000000" @select="selectFiles">
-              <template #header="{ chooseCallback }">
-                <Avatar :image="inputPlayer.profile_pic?.objectURL" :label="inputPlayer.profile_pic ? '' : '+'" class="mr-2" size="medium" shape="circle" @click="chooseCallback()" />
-              </template>
-              <template #content>
-                <div />
-              </template>
-            </FileUpload>
-          </span>
-          <InputText v-if="editing" v-model="inputPlayer.name" class="input-player" type="text" size="small" placeholder="Add a player" />
+          <InputText
+            v-if="editing" v-model="inputPlayer.profile_pic" class="input-player" type="text" size="small"
+            placeholder="Add a profile pic url"
+          />
+          <InputText
+            v-if="editing" v-model="inputPlayer.name" class="input-player" type="text" size="small"
+            placeholder="Add a player"
+          />
         </div>
         <div class="detail flex justify-between">
           <span v-if="!editing">{{ player?.victories }}</span>
           <span v-if="!editing">{{ player?.defeats }}</span>
-          <span v-if="!editing">{{ player?.elo }}</span>
+          <span v-if="!editing">{{ player?.current_elo.toFixed(1) }}</span>
         </div>
         <span v-if="editing" class="submit-button">
           <Submit size="small" :disabled="false" label="Submit" @click="submit()" />
@@ -69,20 +59,24 @@ function selectFiles(event: { files: string | any[] }) {
 
 <style lang="scss" scoped>
 @import '../assets/variables.scss';
+
 .players-list-container {
   vertical-align: middle;
   align-self: center;
 }
+
 :deep(.p-card-body) {
-  padding: 10px 10px !important ;
+  padding: 10px 10px !important;
   gap: 0 !important;
 }
+
 .card {
   display: flex;
   justify-content: space-between;
   align-items: center;
   vertical-align: middle;
   font-size: 16px;
+
   .name {
     font-size: 16px;
     gap: 1rem;
@@ -95,13 +89,16 @@ function selectFiles(event: { files: string | any[] }) {
     border: 0;
     width: 2rem;
     height: 2rem;
+
     .p-fileupload-header {
       padding: 0;
       width: 2rem;
       height: 2rem;
+
       .p-avatar {
         margin: 0;
       }
+
       .p-avatar:hover {
         cursor: pointer;
       }

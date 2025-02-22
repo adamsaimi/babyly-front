@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import PlayerCard from './PlayerCard.vue'
 import { usePlayerStore } from '~/stores/player'
+import { useGameStore } from '~/stores/game'
 import type { Player } from '~/types'
 
 const playerStore = usePlayerStore()
+const gameStore = useGameStore()
 const isEditing = ref(false)
 const playerList = ref<Player[]>([])
 function addPlayer(player: { name?: string, profile_pic?: any }) {
@@ -14,6 +16,23 @@ function addPlayer(player: { name?: string, profile_pic?: any }) {
     })
   })
 }
+function calculateElo() {
+  gameStore.calculateElo().then(() => {
+    playerStore.getPlayers().then(() => {
+      playerList.value = playerStore.results
+    })
+  })
+}
+function comparePlayer(a: Player, b: Player) {
+  if (a.current_elo > b.current_elo)
+    return -1
+
+  if (a.current_elo < b.current_elo)
+    return 1
+
+  return 0
+}
+
 onBeforeMount(() => {
   playerStore.getPlayers().then(() => {
     playerList.value = playerStore.results
@@ -24,7 +43,12 @@ onBeforeMount(() => {
 <template>
   <div class="forms">
     <div class="players-list-container">
-      <h2>Current Player List</h2>
+      <div class="players-list-header w-100 flex">
+        <h2>Current Player List</h2>
+        <button class="calculate-button" @click="calculateElo()">
+          Calculate Elo
+        </button>
+      </div>
       <div class="players-list">
         <div class="header">
           <span style="padding-left: 50px;" class="name">Name</span>
@@ -41,7 +65,7 @@ onBeforeMount(() => {
           <PlayerCard v-if="isEditing" :editing="true" @submit="addPlayer" />
         </div>
         <div style="overflow: auto; max-height: 450px;">
-          <div v-for="player in playerList" :key="player.id" class="player-list-cards">
+          <div v-for="player in playerList.sort(comparePlayer)" :key="player.id" class="player-list-cards">
             <PlayerCard :player="player" />
           </div>
         </div>
@@ -52,6 +76,7 @@ onBeforeMount(() => {
 
 <style lang="scss" scoped>
 @import '../assets/variables.scss';
+
 .forms {
   display: flex;
   justify-content: center;
@@ -63,20 +88,40 @@ onBeforeMount(() => {
 .players-list-container {
   vertical-align: middle;
   padding-top: 30px;
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    font-size: 16px;
-    font-weight: bold;
+
+  .players-list-header {
+    justify-content: space-around;
+    margin-bottom: 10px;
+
+    h2 {
+      font-size: 28px;
+      margin: auto 0;
+    }
+
+    .calculate-button {
+      background-color: #435c6466;
+      padding: 5px 10px;
+      border-radius: 10px;
+
+      &:hover {
+        background-color: #435c6496;
+      }
+    }
   }
-  .add-player-button {
-    margin-bottom: 1rem;
-  }
-  h2 {
-    margin-bottom: 1rem;
-    font-size: 28px;
+
+  .players-list {
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .add-player-button {
+      margin-bottom: 1rem;
+    }
   }
 }
 
@@ -97,6 +142,7 @@ onBeforeMount(() => {
   .name {
     font-size: 12px;
   }
+
   .score-header {
     width: 40%;
     gap: 1rem;
@@ -108,6 +154,7 @@ onBeforeMount(() => {
   .players-list-container {
     width: 800px;
   }
+
   .score-header {
     gap: 2.5rem;
   }

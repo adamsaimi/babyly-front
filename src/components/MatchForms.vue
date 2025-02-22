@@ -130,9 +130,18 @@ onBeforeMount(() => {
       <div class="team team-one" style="align-items: end;">
         <div class="flex flex-row gap-2">
           <Transition name="slide-left">
-            <Avatar v-if="game.teams[0].players[0]" v-style-class="{ enterFromClass: 'my-hidden', enterActiveClass: 'my-fadein' }" :image="game.teams[0].players[0].profile_pic" :label="game.teams[0].players[0].profile_pic ? '' : game.teams[0].players[0]?.name?.charAt(0)" class="avatar-select" size="medium" shape="circle" />
+            <Avatar
+              v-if="game.teams[0].players[0]"
+              v-style-class="{ enterFromClass: 'my-hidden', enterActiveClass: 'my-fadein' }"
+              :image="game.teams[0].players[0].profile_pic"
+              :label="game.teams[0].players[0].profile_pic ? '' : game.teams[0].players[0]?.name?.charAt(0)"
+              class="avatar-select" size="medium" shape="circle"
+            />
           </Transition>
-          <Select v-model="game.teams[0].players[0]" show-clear class="select-player w-full" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[0].players[0], 0)">
+          <Select
+            v-model="game.teams[0].players[0]" show-clear class="select-player w-full" :options="getPlayers()"
+            option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[0].players[0], 0)"
+          >
             <template #value="slotProps">
               <div v-if="slotProps.value" class="flex items-center">
                 <div>
@@ -152,10 +161,17 @@ onBeforeMount(() => {
         </div>
         <div class="flex flex-row gap-2">
           <Transition name="slide-left">
-            <Avatar v-if="game.teams[0].players[1]" :image="game.teams[0].players[1].profile_pic" :label="game.teams[0].players[1].profile_pic ? '' : game.teams[0].players[1].name.charAt(0)" class="avatar-select" size="medium" shape="circle" />
+            <Avatar
+              v-if="game.teams[0].players[1]" :image="game.teams[0].players[1].profile_pic"
+              :label="game.teams[0].players[1].profile_pic ? '' : game.teams[0].players[1].name.charAt(0)"
+              class="avatar-select" size="medium" shape="circle"
+            />
           </Transition>
 
-          <Select v-model="game.teams[0].players[1]" show-clear class="select-player" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[0].players[1], 1)">
+          <Select
+            v-model="game.teams[0].players[1]" show-clear class="select-player" :options="getPlayers()"
+            option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[0].players[1], 1)"
+          >
             <template #value="slotProps">
               <div v-if="slotProps.value" class="flex items-center">
                 <div>{{ slotProps.value.name }}</div>
@@ -179,7 +195,10 @@ onBeforeMount(() => {
 
       <div class="team team-two">
         <div class="flex flex-row gap-2">
-          <Select v-model="game.teams[1].players[0]" show-clear class="select-player" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[1].players[0], 2)">
+          <Select
+            v-model="game.teams[1].players[0]" show-clear class="select-player" :options="getPlayers()"
+            option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[1].players[0], 2)"
+          >
             <template #value="slotProps">
               <div v-if="slotProps.value" class="flex items-center">
                 <div>
@@ -197,11 +216,20 @@ onBeforeMount(() => {
             </template>
           </Select>
           <Transition name="slide-right">
-            <Avatar v-if="game.teams[1].players[0]" :image="game.teams[0].players[0]?.profile_pic" :label="game.teams[1].players[0].profile_pic ? '' : game.teams[1].players[0].name.charAt(0)" class="avatar-select" size="medium" shape="circle" />
+            <Avatar
+              v-if="game.teams[1].players[0]"
+              v-style-class="{ enterFromClass: 'my-hidden', enterActiveClass: 'my-fadein' }"
+              :image="game.teams[1].players[0].profile_pic"
+              :label="game.teams[1].players[0].profile_pic ? '' : game.teams[1].players[0]?.name?.charAt(0)"
+              class="avatar-select" size="medium" shape="circle"
+            />
           </Transition>
         </div>
         <div class="flex flex-row gap-2">
-          <Select v-model="game.teams[1].players[1]" show-clear class="select-player" :options="getPlayers()" option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[1].players[1], 3)">
+          <Select
+            v-model="game.teams[1].players[1]" show-clear class="select-player" :options="getPlayers()"
+            option-label="name" placeholder="Select a Player" @change="selectPlayer(game.teams[1].players[1], 3)"
+          >
             <template #value="slotProps">
               <div v-if="slotProps.value" class="flex items-center">
                 <div>{{ slotProps.value.name }}</div>
@@ -217,7 +245,13 @@ onBeforeMount(() => {
             </template>
           </Select>
           <Transition name="slide-right">
-            <Avatar v-if="game.teams[1].players[1]" :image="game.teams[1].players[1].profile_pic" :label="game.teams[1].players[1].profile_pic ? '' : game.teams[1].players[1].name.charAt(0)" class="avatar-select" size="medium" shape="circle" />
+            <Avatar
+              v-if="game.teams[1].players[1]"
+              v-style-class="{ enterFromClass: 'my-hidden', enterActiveClass: 'my-fadein' }"
+              :image="game.teams[1].players[1].profile_pic"
+              :label="game.teams[1].players[1].profile_pic ? '' : game.teams[1].players[1]?.name?.charAt(0)"
+              class="avatar-select" size="medium" shape="circle"
+            />
           </Transition>
         </div>
       </div>
@@ -227,9 +261,7 @@ onBeforeMount(() => {
       SCORE
     </h2>
 
-    <div
-      class="scores mt-5"
-    >
+    <div class="scores mt-5">
       <div class="score">
         <InputNumber v-model="game.teams[0].score" placeholder="Score" input-id="integeronly" aria-label="score" />
         <Message v-if="!scoreEmpty && !validateScore()" severity="error" icon="pi pi-times-circle" />
@@ -243,7 +275,10 @@ onBeforeMount(() => {
       </div>
     </div>
 
-    <Submit id="submitButton" size="normal" class="submit-button" label="Submit" :disabled="!canSubmit" @click="saveGame()" />
+    <Submit
+      id="submitButton" size="normal" class="submit-button" label="Submit" :disabled="!canSubmit"
+      @click="saveGame()"
+    />
   </form>
 </template>
 
@@ -256,6 +291,7 @@ onBeforeMount(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   h1 {
     vertical-align: baseline;
     margin-bottom: 20px;
@@ -269,12 +305,14 @@ onBeforeMount(() => {
     align-self: center;
   }
 }
+
 .team {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   gap: 10px;
 }
+
 .game-team {
   display: flex;
   width: 100%;
@@ -289,6 +327,7 @@ onBeforeMount(() => {
   justify-content: center;
   align-items: center;
   gap: 25px;
+
   .score {
     display: flex;
     flex-direction: row;
@@ -303,6 +342,7 @@ onBeforeMount(() => {
   z-index: 0;
   float: left;
 }
+
 .forms {
   position: relative;
 }
@@ -334,6 +374,7 @@ onBeforeMount(() => {
   h1 {
     font-size: 24px;
   }
+
   .team {
     width: 240px;
   }
@@ -363,6 +404,7 @@ onBeforeMount(() => {
     margin-bottom: 10px;
     gap: 10px;
   }
+
   .submit-button {
     margin-top: 20px;
   }
@@ -373,6 +415,7 @@ onBeforeMount(() => {
 .slide-left-enter-active {
   transition: all 0.3s ease-out;
 }
+
 .slide-right-leave-active,
 .slide-left-leave-active {
   transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
